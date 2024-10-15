@@ -4,6 +4,9 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
+# load blueprints
+from routes.user_routes import user_routes
+
 # load constants
 load_dotenv()
 SUPABASE_URI: str = os.getenv("SUPABASE_URI")
@@ -22,6 +25,9 @@ if not DEBUG:
     @app.route("/")
     def serve_svelte_app():
         return send_from_directory('dist', 'index.html')
+
+# configure routes
+app.register_blueprint(user_routes, url_prefix="/api/users")
 
 if __name__ == "__main__":
     app.run()
