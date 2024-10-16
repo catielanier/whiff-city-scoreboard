@@ -10,6 +10,7 @@
   import type {Commentator, Player, ScoreboardResponse} from "./utils/types";
   import axios from "axios";
   import {objectToCamel} from "ts-case-convert";
+  import {getToken} from "./utils/tokenService";
 
   export let loggedIn: boolean | null;
   let socket: Socket | null;
@@ -21,7 +22,7 @@
   }
 
   onMount(() => {
-    loggedIn = !!localStorage.getItem("token")
+    loggedIn = !!getToken();
     if (loggedIn) {
       retrieveScoreboard();
     }
