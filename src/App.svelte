@@ -12,7 +12,7 @@
   import {objectToCamel} from "ts-case-convert";
   import {getToken} from "./utils/tokenService";
 
-  export let loggedIn: boolean | null;
+  let loggedIn: boolean | null;
   let socket: Socket | null;
 
   const retrieveScoreboard = async (): Promise<void> => {
@@ -35,10 +35,10 @@
     })
   })
 
-  export let players: Player[] = []
-  export let commentators: Commentator[] = []
+  let players: Player[] = []
+  let commentators: Commentator[] = []
 
-  export let url: string = "";
+  let url: string = "";
   onDestroy(() => {
     socket?.disconnect()
     console.log('connection closed')
