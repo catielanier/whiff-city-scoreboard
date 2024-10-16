@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 # load blueprints
 from routes.user_routes import user_routes
+from routes.scoreboard_routes import scoreboard_routes
 
 # load constants
 from utils.constants import ENVIRONMENT
@@ -21,6 +22,7 @@ if not DEBUG:
 
 # configure routes
 app.register_blueprint(user_routes, url_prefix="/api/users")
+app.register_blueprint(scoreboard_routes, url_prefix="/api/scoreboard")
 
 if __name__ == "__main__":
     app.run()
