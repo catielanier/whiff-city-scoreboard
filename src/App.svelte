@@ -1,6 +1,7 @@
 <script lang="ts">
-  import {onMount} from "svelte";
+  import {onDestroy, onMount} from "svelte";
   import {Router, Route} from "svelte-routing";
+  import {io, Socket} from "socket.io-client";}
   import Home from "./routes/Home.svelte";
   import Update from "./routes/Update.svelte";
   import Login from "./routes/Login.svelte";
@@ -11,6 +12,7 @@
   import {objectToCamel} from "ts-case-convert";
 
   export let loggedIn: boolean | null;
+  let socket: Socket | null;
 
   const retrieveScoreboard = async (): Promise<void> => {
     const { data } = await axios.get<ScoreboardResponse>("/api/scoreboard");
@@ -23,12 +25,23 @@
     if (loggedIn) {
       retrieveScoreboard();
     }
+    socket = io();
+    socket.on('connect', () => {
+      console.log('connection established')
+    })
+    socket.on('scoreboard_updated', () => {
+      retrieveScoreboard();
+    })
   })
 
   export let players: Player[] = []
   export let commentators: Commentator[] = []
 
   export let url: string = "";
+  onDestroy(() => {
+    socket?.disconnect()
+    console.log('connection closed')
+  })
 </script>
 
 <Router {url}>
