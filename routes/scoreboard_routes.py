@@ -36,3 +36,18 @@ def update_scoreboard() -> Response:
         "player_scores": updated_scores.data,
         "commentator_info": updated_info.data
     })
+
+@scoreboard_routes.route("/new", methods=["POST"])
+def create_scoreboard() -> Response:
+    post_data = request.get_json()
+    player_scores = post_data.get("player_scores")
+    commentator_info = post_data.get("commentator_info")
+    created_scores: APIResponse = supabase.table("player_scores").insert(player_scores).execute()
+    created_info: APIResponse = supabase.table("commentator_info").insert(commentator_info).execute()
+
+    return jsonify({
+        "status": 201,
+        "message": "Successfully created scoreboard",
+        "player_scores": created_scores.data,
+        "commentator_info": created_info.data
+    })
