@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory
 from flask_cors import CORS
+from flask_socketio import SocketIO
 
 # load blueprints
 from routes.user_routes import user_routes
@@ -15,6 +16,8 @@ app.config.from_object(__name__)
 
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+socket: SocketIO = SocketIO(app, cors_allowed_origins="*")
+
 if not DEBUG:
     @app.route("/")
     def serve_svelte_app():
@@ -25,4 +28,4 @@ app.register_blueprint(user_routes, url_prefix="/api/users")
 app.register_blueprint(scoreboard_routes, url_prefix="/api/scoreboard")
 
 if __name__ == "__main__":
-    app.run()
+    socket.run(app, debug=DEBUG)

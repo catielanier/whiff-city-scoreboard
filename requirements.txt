@@ -3,3 +3,5 @@ flask_cors
 python-dotenv
 supabase
 pyjwt
+flask-socketio
+eventlet
