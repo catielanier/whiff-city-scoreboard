@@ -2,11 +2,13 @@ import os
 import jwt
 from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify, Response
+from supabase import Client
 
-from server import supabase
+from utils.supabase_client import get_client
 
 load_dotenv()
 SECRET: str = os.getenv("SECRET")
+supabase: Client = get_client()
 
 user_routes = Blueprint("user_routes", __name__)
 
@@ -24,11 +26,11 @@ def login() -> Response:
         "email": email, "password": password
     })
     if res.user.role == "authenticated":
-        jwt: str = generate_token(res)
+        token: str = generate_token(res)
         return jsonify({
             "status": 201,
             "message": "Successfully logged in",
-            "token": jwt
+            "token": token
         })
     return jsonify({
         "status": 401,
