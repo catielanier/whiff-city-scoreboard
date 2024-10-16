@@ -6,12 +6,27 @@
   import Login from "./routes/Login.svelte";
   import Scoreboard from "./routes/Scoreboard.svelte";
   import Commentators from "./routes/Commentators.svelte";
+  import type {Commentator, Player, ScoreboardResponse} from "./utils/types";
+  import axios from "axios";
+  import {objectToCamel} from "ts-case-convert";
 
-  let loggedIn: boolean | null;
+  export let loggedIn: boolean | null;
+
+  const retrieveScoreboard = async (): Promise<void> => {
+    const { data } = await axios.get<ScoreboardResponse>("/api/scoreboard");
+    players = objectToCamel(data.player_scores);
+    commentators = objectToCamel(data.commentator_info);
+  }
 
   onMount(() => {
-    loggedIn = !!localStorage.getItem("token");
+    loggedIn = !!localStorage.getItem("token")
+    if (loggedIn) {
+      retrieveScoreboard();
+    }
   })
+
+  export let players: Player[] = []
+  export let commentators: Commentator[] = []
 
   export let url: string = "";
 </script>
@@ -22,10 +37,10 @@
       <Route path="/" component={Home} />
       <Route path="/update" component={Update} />
     {:else}
-      <Route path="/" component={Login} />
+      <Route path="/"><Login {loggedIn} /></Route>
     {/if}
-    <Route path="/scoreboard" component={Scoreboard} />
-    <Route path="/commentators" component={Commentators} />
+    <Route path="/scoreboard"><Scoreboard {players} /></Route>
+    <Route path="/commentators"><Commentators {commentators} /></Route>
   </main>
 </Router>
 
