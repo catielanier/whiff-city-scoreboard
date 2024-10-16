@@ -1,13 +1,10 @@
-import os
 import jwt
-from dotenv import load_dotenv
 from flask import Blueprint, request, jsonify, Response
 from supabase import Client
 
 from utils.supabase_client import get_client
+from utils.constants import SECRET
 
-load_dotenv()
-SECRET: str = os.getenv("SECRET")
 supabase: Client = get_client()
 
 user_routes = Blueprint("user_routes", __name__)
