@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, Response
 from postgrest import APIResponse
 from supabase import Client
+from flask_socketio import emit
 
 from utils.supabase_client import get_client
 
@@ -26,6 +27,9 @@ def update_scoreboard() -> Response:
     commentator_info = put_data.get("commentator_info")
     updated_scores: APIResponse = supabase.table("player_scores").update(player_scores).execute()
     updated_info: APIResponse = supabase.table("commentator_info").update(commentator_info).execute()
+
+    emit("scoreboard_updated", {}, broadcast=True)
+
     return jsonify({
         "status": 201,
         "message": "Successfully updated scoreboard",
