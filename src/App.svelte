@@ -48,7 +48,7 @@
   <main>
     {#if loggedIn}
       <Route path="/" component={Home} />
-      <Route path="/update" component={Update} />
+      <Route path="/update"><Update {players} {commentators} /></Route>
     {:else}
       <Route path="/"><Login {loggedIn} /></Route>
     {/if}
