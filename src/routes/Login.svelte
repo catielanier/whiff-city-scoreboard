@@ -6,7 +6,8 @@
     let password: string = '';
     let error: string | null;
 
-    const submitLogin = async (): Promise<void> => {
+    const submitLogin = async (e: Event): Promise<void> => {
+        e.preventDefault();
         const res = await axios.post('/api/users/login', {
             email,
             password
@@ -21,7 +22,7 @@
 </script>
 
 <div class="login">
-    <form on:submit.prevent="submitLogin">
+    <form on:submit={submitLogin}>
         <input type="email" bind:value={email} placeholder="Email address" />
         <input type="password" bind:value={password} placeholder="Password" />
         <button type="submit">Login</button>
