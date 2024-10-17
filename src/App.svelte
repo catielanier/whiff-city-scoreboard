@@ -1,7 +1,7 @@
 <script lang="ts">
   import {onDestroy, onMount} from "svelte";
   import {Router, Route} from "svelte-routing";
-  import {io, Socket} from "socket.io-client";}
+  import {io, Socket} from "socket.io-client";
   import Home from "./routes/Home.svelte";
   import Update from "./routes/Update.svelte";
   import Login from "./routes/Login.svelte";
