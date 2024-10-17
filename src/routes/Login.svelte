@@ -1,3 +1,29 @@
 <script lang="ts">
+    import axios from "axios";
+    import {setToken} from "../utils/tokenService";
     export let loggedIn: boolean | null;
+    let email: string = '';
+    let password: string = '';
+    let error: string | null;
+
+    const submitLogin = async (): Promise<void> => {
+        const res = await axios.post('/api/users/login', {
+            email,
+            password
+        });
+        if (res.data.status === 201) {
+            setToken(res.data.token);
+            loggedIn = true;
+        } else {
+            error = 'Invalid email or password';
+        }
+    }
 </script>
+
+<div class="login">
+    <form on:submit.prevent="submitLogin">
+        <input type="email" bind:value={email} placeholder="Email address" />
+        <input type="password" bind:value={password} placeholder="Password" />
+        <button type="submit">Login</button>
+    </form>
+</div>
