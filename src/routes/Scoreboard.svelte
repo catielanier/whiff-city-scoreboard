@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {onMount} from "svelte";
+    import {onDestroy, onMount} from "svelte";
     import axios from "axios";
     import {objectToCamel} from "ts-case-convert";
     import {io, type Socket} from "socket.io-client";
@@ -22,6 +22,11 @@
         socket.on('scoreboard_updated', () => {
             retrieveScoreboard();
         })
+    })
+
+    onDestroy(() => {
+        socket?.disconnect()
+        console.log('connection closed')
     })
 </script>
 
