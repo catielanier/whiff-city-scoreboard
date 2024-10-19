@@ -1,26 +1,20 @@
 <script lang="ts">
     import {onDestroy, onMount} from "svelte";
-    import axios from "axios";
-    import {objectToCamel} from "ts-case-convert";
-    import {io, type Socket} from "socket.io-client";
-    import type {Player, ScoreboardResponse} from "../utils/types";
+    import { io, type Socket } from "socket.io-client";
+    import type { Player } from "../utils/types";
+    import { retrieveScoreboard } from "../utils/api";
 
     let players: Player[];
     let socket: Socket | null;
 
-    const retrieveScoreboard = async (): Promise<void> => {
-        const { data } = await axios.get<ScoreboardResponse>("/api/scoreboard");
-        players = objectToCamel(data.player_scores);
-    }
-
-    onMount(() => {
-        retrieveScoreboard();
+    onMount(async () => {
+        players = await retrieveScoreboard();
         socket = io();
         socket?.on('connect', () => {
             console.log('connection established')
         })
-        socket?.on('scoreboard_updated', () => {
-            retrieveScoreboard();
+        socket?.on('scoreboard_updated', async () => {
+            players = await retrieveScoreboard();
         })
     })
 
