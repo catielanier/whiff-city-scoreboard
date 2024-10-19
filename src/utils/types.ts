@@ -28,6 +28,10 @@ export interface SnakePlayer {
 
 export interface ScoreboardResponse {
     player_scores: SnakePlayer[];
+    status: number;
+}
+
+export interface CommentatorResponse {
     commentator_info: SnakeCommentator[];
     status: number;
 }
