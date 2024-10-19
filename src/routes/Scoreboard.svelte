@@ -16,10 +16,10 @@
     onMount(() => {
         retrieveScoreboard();
         socket = io();
-        socket.on('connect', () => {
+        socket?.on('connect', () => {
             console.log('connection established')
         })
-        socket.on('scoreboard_updated', () => {
+        socket?.on('scoreboard_updated', () => {
             retrieveScoreboard();
         })
     })

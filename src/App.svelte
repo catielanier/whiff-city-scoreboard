@@ -22,7 +22,6 @@
   const retrieveScoreboard = async (): Promise<void> => {
     const { data } = await axios.get<ScoreboardResponse>("/api/scoreboard");
     players = objectToCamel(data.player_scores);
-    commentators = objectToCamel(data.commentator_info);
   }
 
   onMount(() => {
@@ -57,7 +56,7 @@
     {:else}
       <Route path="/"><Login {setLogin} /></Route>
     {/if}
-    <Route path="/scoreboard"><Scoreboard {players} /></Route>
+    <Route path="/scoreboard" component={Scoreboard} />
     <Route path="/commentators"><Commentators {commentators} /></Route>
   </main>
 </Router>
