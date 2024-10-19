@@ -15,6 +15,10 @@
   let loggedIn: boolean | null;
   let socket: Socket | null;
 
+  export const setLogin = (): void => {
+    loggedIn = true;
+  }
+
   const retrieveScoreboard = async (): Promise<void> => {
     const { data } = await axios.get<ScoreboardResponse>("/api/scoreboard");
     players = objectToCamel(data.player_scores);
@@ -51,7 +55,7 @@
       <Route path="/" component={Home} />
       <Route path="/update"><Update {players} {commentators} /></Route>
     {:else}
-      <Route path="/"><Login {loggedIn} /></Route>
+      <Route path="/"><Login {setLogin} /></Route>
     {/if}
     <Route path="/scoreboard"><Scoreboard {players} /></Route>
     <Route path="/commentators"><Commentators {commentators} /></Route>

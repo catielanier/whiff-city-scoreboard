@@ -1,7 +1,7 @@
 <script lang="ts">
     import axios from "axios";
     import {setToken} from "../utils/tokenService";
-    export let loggedIn: boolean | null;
+    export let setLogin: () => void;
     let email: string = '';
     let password: string = '';
     let error: string | null;
@@ -14,7 +14,7 @@
         });
         if (res.data.status === 201) {
             setToken(res.data.token);
-            loggedIn = true;
+            setLogin();
         } else {
             error = 'Invalid email or password';
         }

@@ -1,3 +1,4 @@
+import json
 import jwt
 from flask import Blueprint, request, jsonify, Response
 from gotrue import AuthResponse
@@ -11,8 +12,8 @@ supabase: Client = get_client()
 user_routes: Blueprint = Blueprint("user_routes", __name__)
 
 
-def generate_token(user: AuthResponse) -> str:
-    token: str = jwt.encode({"user": user}, SECRET, algorithm="HS256")
+def generate_token(user_id: str) -> str:
+    token: str = jwt.encode({"user": user_id}, SECRET, algorithm="HS256")
     return token
 
 @user_routes.route("/login", methods=["POST"])
@@ -24,7 +25,7 @@ def login() -> Response:
         "email": email, "password": password
     })
     if res.user.role == "authenticated":
-        token: str = generate_token(res)
+        token: str = generate_token(res.user.id)
         return jsonify({
             "status": 201,
             "message": "Successfully logged in",
