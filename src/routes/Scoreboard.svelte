@@ -1,20 +1,43 @@
 <script lang="ts">
-    import type {Player} from "../utils/types";
+    import {onMount} from "svelte";
+    import axios from "axios";
+    import {objectToCamel} from "ts-case-convert";
+    import {io, type Socket} from "socket.io-client";
+    import type {Player, ScoreboardResponse} from "../utils/types";
 
-    export let players: Player[]
+    let players: Player[];
+    let socket: Socket | null;
+
+    const retrieveScoreboard = async (): Promise<void> => {
+        const { data } = await axios.get<ScoreboardResponse>("/api/scoreboard");
+        players = objectToCamel(data.player_scores);
+    }
+
+    onMount(() => {
+        retrieveScoreboard();
+        socket = io();
+        socket.on('connect', () => {
+            console.log('connection established')
+        })
+        socket.on('scoreboard_updated', () => {
+            retrieveScoreboard();
+        })
+    })
 </script>
 
 <div class="scoreboard">
-    <div class="wrapper">
-        <div class="left-player">
-            <div class="score"><span class="score-inner">{players[0].score}</span></div>
-            <div class="player-info"><span class="player"><span class="team">{players[0].teamName}</span> {players[0].playerName}</span></div>
+    {#if players?.length}
+        <div class="wrapper">
+            <div class="left-player">
+                <div class="score"><span class="score-inner">{players[0].score}</span></div>
+                <div class="player-info"><span class="player"><span class="team">{players[0].teamName}</span> {players[0].playerName}</span></div>
+            </div>
+            <div class="right-player">
+                <div class="player-info"><span class="player"><span class="team">{players[1].teamName}</span> {players[1].playerName}</span></div>
+                <div class="score"><span class="score-inner">{players[1].score}</span></div>
+            </div>
         </div>
-        <div class="right-player">
-            <div class="player-info"><span class="player"><span class="team">{players[1].teamName}</span> {players[1].playerName}</span></div>
-            <div class="score"><span class="score-inner">{players[1].score}</span></div>
-        </div>
-    </div>
+    {/if}
 </div>
 
 <style>
