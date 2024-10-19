@@ -18,25 +18,34 @@
 </div>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
     .scoreboard {
         width: 1080px;
+        height: 80px;
+        font-family: 'Audiowide', sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 30px;
     }
     .wrapper, .left-player, .right-player {
         display: grid;
     }
     .wrapper {
-        width: 90%;
+        width: 100%;
         grid-template-columns: 1fr 1fr;
     }
     .left-player, .right-player {
-        width: 50%;
+        width: 100%;
     }
     .left-player {
         grid-template-columns: 1fr 6fr;
         transform: skewX(30deg);
+        margin-right: 25px;
     }
     .right-player {
         grid-template-columns: 6fr 1fr;
+        transform: skewX(-30deg);
+        margin-left: 27px;
     }
     .player-info .player, .score-inner {
         display: block;
@@ -44,33 +53,33 @@
     .left-player .player-info .player, .left-player .score-inner {
         transform: skewX(-30deg);
     }
-    .right-player {
-        transform: skewX(-30deg);
-    }
     .right-player .player-info .player, .right-player .score-inner {
         transform: skewX(30deg);
     }
     .left-player .player-info {
         text-align: left;
+        padding-left: 15px;
     }
     .right-player .player-info {
         text-align: right;
+        padding-right: 15px;
     }
     .score {
         background: #EB0405;
-        color: #FFED97;
+        color: #fff;
     }
     .left-player .player-info {
         background: #FFED97;
+        color: #000;
     }
     .left-player .player-info, .right-player .player-info {
-        color: #000;
     }
     .left-player .player-info .team {
         color: #235BA8;
     }
     .right-player .player-info {
-        background: #235BA8
+        background: #235BA8;
+        color: #fff;
     }
     .right-player .team {
         color: #FFED97;
