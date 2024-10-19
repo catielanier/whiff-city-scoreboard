@@ -2,6 +2,7 @@ from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO
 
+from routes.commentator_routes import commentator_routes
 # load blueprints
 from routes.user_routes import user_routes
 from routes.scoreboard_routes import scoreboard_routes
@@ -26,6 +27,7 @@ if not DEBUG:
 # configure routes
 app.register_blueprint(user_routes, url_prefix="/api/users")
 app.register_blueprint(scoreboard_routes, url_prefix="/api/scoreboard")
+app.register_blueprint(commentator_routes, url_prefix="/api/commentators")
 
 if __name__ == "__main__":
     socket.run(app, debug=DEBUG)
