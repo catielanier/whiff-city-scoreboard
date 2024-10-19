@@ -2,10 +2,10 @@ from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO
 
-from routes.commentator_routes import commentator_routes
 # load blueprints
 from routes.user_routes import user_routes
 from routes.scoreboard_routes import scoreboard_routes
+from routes.commentator_routes import commentator_routes
 
 # load constants
 from utils.constants import ENVIRONMENT
