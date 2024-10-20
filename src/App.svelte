@@ -52,11 +52,11 @@
   <main>
     {#if loggedIn}
       <Route path="/" component={Home} />
-      <Route path="/update"><Update {players} {commentators} /></Route>
+      <Route path="/update" component={Update} />
     {:else}
       <Route path="/"><Login {setLogin} /></Route>
     {/if}
     <Route path="/scoreboard" component={Scoreboard} />
-    <Route path="/commentators"><Commentators {commentators} /></Route>
+    <Route path="/commentators" component={Commentators} />
   </main>
 </Router>
