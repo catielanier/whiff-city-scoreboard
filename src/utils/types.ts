@@ -35,3 +35,13 @@ export interface CommentatorResponse {
     commentator_info: SnakeCommentator[];
     status: number;
 }
+
+export interface UpdateData {
+    playerScores: Player[];
+    commentatorInfo: Commentator[];
+}
+
+export interface UpdateDataSnaked {
+    player_scores: SnakePlayer[];
+    commentator_info: SnakeCommentator[];
+}
