@@ -42,7 +42,7 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
     .scoreboard {
-        width: 1080px;
+        width: 1920px;
         height: 80px;
         font-family: 'Audiowide', sans-serif;
         font-weight: 400;
