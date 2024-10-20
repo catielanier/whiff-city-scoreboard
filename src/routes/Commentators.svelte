@@ -51,7 +51,7 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
     .commentators {
-        width: 1920px;
+        width: 100%;
     }
     .wrapper {
         font-family: 'Audiowide', sans-serif;

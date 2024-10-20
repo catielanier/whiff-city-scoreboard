@@ -42,7 +42,8 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
     .scoreboard {
-        width: 1920px;
+        max-width: 1700px;
+        width: 100%;
         height: 80px;
         font-family: 'Audiowide', sans-serif;
         font-weight: 400;
@@ -55,6 +56,8 @@
     .wrapper {
         width: 100%;
         grid-template-columns: 1fr 1fr;
+        margin-right: 200px;
+        padding: 0 50px 0 25px;
     }
     .left-player, .right-player {
         width: 100%;
