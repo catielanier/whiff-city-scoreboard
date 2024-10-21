@@ -1,6 +1,138 @@
 <script lang="ts">
-    import type {Commentator, Player} from "../utils/types";
+    import {onMount} from "svelte";
+    import {objectToSnake} from "ts-case-convert";
+    import axios from "axios";
+    import type {Commentator, Player, UpdateDataSnaked, UpdateData} from "../utils/types";
+    import {retrieveCommentators, retrieveScoreboard} from "../utils/api";
 
-    export let players: Player[]
-    export let commentators: Commentator[]
+    let players: Player[]
+    let commentators: Commentator[]
+
+    let isLoading: boolean = false;
+    let errMsg: string | null;
+
+    const updateScoreboard = async (): Promise<void> => {
+        isLoading = true;
+        const updateInfo: UpdateData = {
+            playerScores: players,
+            commentatorInfo: commentators
+        }
+        const apiUpdateInfo: UpdateDataSnaked = objectToSnake(updateInfo);
+        const res = await axios.put('/api/scoreboard', apiUpdateInfo);
+        if (res?.data.status !== 201) {
+            errMsg = "Unable to update, try again.";
+        }
+        isLoading = false;
+    }
+
+    const clearScores = (e: Event): void => {
+        e.preventDefault();
+        players.forEach((player: Player): void => {
+            player.score = 0;
+        });
+        updateScoreboard();
+    }
+
+    const swapSides = (e: Event): void => {
+        const oldLeft: Player = {...players[0]}
+        const oldRight: Player = {...players[1]}
+        oldLeft.id = 2;
+        oldRight.id = 1;
+        players[0] = oldRight;
+        players[1] = oldLeft;
+        updateScoreboard();
+    }
+
+    onMount(async () => {
+        players = await retrieveScoreboard();
+        commentators = await retrieveCommentators();
+    });
 </script>
+
+<div class="update">
+    {#if players?.length && commentators?.length}
+        <div class="wrapper">
+            <form on:submit={(e) => {
+                e.preventDefault();
+                updateScoreboard();
+            }}>
+                <div class="player-info">
+                    <div class="player-one">
+                        <p>Left Player:</p>
+                        <div class="player-one-wrapper">
+                            <div class="team">
+                                <p>Team:</p>
+                                <input type="text" bind:value={players[0].teamName} />
+                            </div>
+                            <div class="player-name">
+                                <p>Player Name:</p>
+                                <input type="text" bind:value={players[0].playerName} />
+                            </div>
+                            <div class="score">
+                                <p>Score:</p>
+                                <input type="number" bind:value={players[0].score} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="player-two">
+                        <p>Right Player:</p>
+                        <div class="player-two-wrapper">
+                            <div class="team">
+                                <p>Team:</p>
+                                <input type="text" bind:value={players[1].teamName} />
+                            </div>
+                            <div class="player-name">
+                                <p>Player Name:</p>
+                                <input type="text" bind:value={players[1].playerName} />
+                            </div>
+                            <div class="score">
+                                <p>Score:</p>
+                                <input type="number" bind:value={players[1].score} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="commentator-info">
+                    <div class="commentator-one">
+                        <p>Left Commentator:</p>
+                        <div class="commentator-one-wrapper">
+                            <div class="team">
+                                <p>Team:</p>
+                                <input type="text" bind:value={commentators[0].teamName} />
+                            </div>
+                            <div class="commentator-name">
+                                <p>Player Name:</p>
+                                <input type="text" bind:value={commentators[0].commentatorName} />
+                            </div>
+                            <div class="x-handle">
+                                <p>Twitter (Exclude @):</p>
+                                <input type="text" bind:value={commentators[0].xHandle} />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commentator-two">
+                        <p>Right Commentator:</p>
+                        <div class="commentator-two-wrapper">
+                            <div class="team">
+                                <p>Team:</p>
+                                <input type="text" bind:value={commentators[1].teamName} />
+                            </div>
+                            <div class="commentator-name">
+                                <p>Player Name:</p>
+                                <input type="text" bind:value={commentators[1].commentatorName} />
+                            </div>
+                            <div class="x-handle">
+                                <p>Twitter (Exclude @):</p>
+                                <input type="text" bind:value={commentators[1].xHandle} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit">Update</button>
+                <button on:click={clearScores}>Clear Scores</button>
+                <button on:click={swapSides}>Swap Player Sides</button>
+                <button>Swap Commentator Sides</button>
+            </form>
+        </div>
+    {/if}
+</div>
