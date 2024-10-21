@@ -34,12 +34,24 @@
     }
 
     const swapSides = (e: Event): void => {
+        e.preventDefault();
         const oldLeft: Player = {...players[0]}
         const oldRight: Player = {...players[1]}
         oldLeft.id = 2;
         oldRight.id = 1;
         players[0] = oldRight;
         players[1] = oldLeft;
+        updateScoreboard();
+    }
+
+    const swapCommentatorSides = (e: Event): void => {
+        e.preventDefault();
+        const oldLeft: Commentator = {...commentators[0]}
+        const oldRight: Commentator = {...commentators[1]}
+        oldLeft.id = 2;
+        oldRight.id = 1;
+        commentators[0] = oldRight;
+        commentators[1] = oldLeft;
         updateScoreboard();
     }
 
@@ -131,7 +143,7 @@
                 <button type="submit">Update</button>
                 <button on:click={clearScores}>Clear Scores</button>
                 <button on:click={swapSides}>Swap Player Sides</button>
-                <button>Swap Commentator Sides</button>
+                <button on:click={swapCommentatorSides}>Swap Commentator Sides</button>
             </form>
         </div>
     {/if}
