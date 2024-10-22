@@ -23,8 +23,10 @@ def update_scoreboard() -> Response:
     put_data = request.get_json()
     player_scores = put_data.get("player_scores")
     commentator_info = put_data.get("commentator_info")
-    updated_scores: APIResponse = supabase.table("player_scores").update(player_scores).execute()
-    updated_info: APIResponse = supabase.table("commentator_info").update(commentator_info).execute()
+    for player in player_scores:
+        res: APIResponse = supabase.table("player_scores").update(player).eq("id", player['id']).execute()
+    for commentator in commentator_info:
+        res: APIResponse = supabase.table("commentator_info").update(commentator).eq("id", commentator['id']).execute()
 
     emit("scoreboard_updated", {}, broadcast=True)
 
